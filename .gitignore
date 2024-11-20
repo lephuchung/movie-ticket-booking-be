@@ -1,0 +1,30 @@
+# Loại bỏ các tệp và thư mục không cần thiết
+
+# Thư mục node_modules
+node_modules/
+
+# Tệp môi trường (chứa thông tin nhạy cảm)
+.env
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Tệp lưu trữ IDE
+.vscode/
+.idea/
+*.swp
+
+# Tệp hệ điều hành
+.DS_Store
+Thumbs.db
+
+# Build files
+dist/
+build/
+
+# Cache tạm của ứng dụng
+.cache/
+tmp/
