@@ -7,7 +7,6 @@ exports.getNowShowing = async (req, res) => {
         if (err) return res.status(500).json({ error: err }); // Trả về lỗi nếu         
         res.json(result); // Trả về kết quả là mảng các phim
     });
-    console.log(res);
 };
 
 // Controller cho API lấy phim theo thể loại

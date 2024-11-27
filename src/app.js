@@ -1,9 +1,13 @@
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const movieRoutes = require('./routes/movieRoutes');  // Import các route liên quan đến phim
 const userRoutes = require('./routes/userRoutes');    // Import các route liên quan đến người dùng
 
 const app = express();
 app.use(express.json()); // Middleware để phân tích dữ liệu JSON từ yêu cầu
+app.use(cors());
+app.use(bodyParser.json());
 
 // Sử dụng các route đã định nghĩa
 app.use('/movies', movieRoutes); // Route cho phim
