@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { blacklistedTokens } = require('../config/tokenBlacklist'); // Sử dụng danh sách token chung
+const { blacklistedTokens } = require('../config/tokenBlackList'); // Sử dụng danh sách token chung
 
 // Middleware xác thực token
 function authenticateToken(req, res, next) {
