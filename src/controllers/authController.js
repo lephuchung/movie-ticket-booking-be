@@ -1,7 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
-const { blacklistedTokens } = require('../config/tokenBlacklist'); // Sử dụng danh sách token chung
+const { blacklistedTokens } = require('../config/tokenBlackList');
+
 
 // Đăng kí
 exports.signup = async (req, res) => {
@@ -78,10 +79,18 @@ exports.signin = async (req, res) => {
 // Đăng xuất
 exports.signout = (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
-    if (token) {
-        blacklistedTokens.push(token); // Thu hồi token
+
+    if (!token) {
+        return res.status(400).json({ error: 'Token is required for logout' });
     }
-    res.json({ message: 'Logged out successfully' });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+            return res.status(401).json({ error: 'Invalid or expired token' });
+        }
+        blacklistedTokens.push(token);
+        res.status(200).json({ message: 'Logged out successfully' });
+    });
 };
 
 // Làm mới AccessToken
