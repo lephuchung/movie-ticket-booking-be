@@ -2,7 +2,6 @@ const movieModel = require('../models/movieModel'); // Import model để truy v
 
 // Controller cho API lấy tất cả các phim đang chiếu
 exports.getNowShowing = async (req, res) => {
-
     await movieModel.getNowShowing((err, result) => {
         if (err) return res.status(500).json({ error: err }); // Trả về lỗi nếu         
         res.json(result); // Trả về kết quả là mảng các phim

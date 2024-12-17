@@ -1328,6 +1328,7 @@ INSERT INTO Users (userId, name, password, email, phone, role, createAt, status)
 ('UID0003', 'Lê Thị C', '1234abcd', 'thic@example.com', '0969280280', 'customer', '2023-08-12', 'active'),
 ('UID0004', 'Chu Văn D', 'qwerty', 'vand@example.com', '0963099099', 'customer', '2023-08-15', 'active'),
 ('UID0005', 'Đinh Thị G', '12346789', 'thig@example.com', '0964868686', 'customer', '2023-08-20', 'active'),
+('UID0007', 'Lê Phúc Hưng', '$2a$12$3QKYEkDoTMC2tATxi.njwuCC8OirYJy31ObQmzMHgGsQOjlcHuCxq', 'hunglp@admin.com', '0123456789', 'admin', '2023-08-20', 'active'),
 ('UID0006', 'Vũ Văn H', 'abcdefgh', 'vanh@example.com', '0986868686', 'customer', '2023-08-25', 'active');
 
 -- Thêm dữ liệu cho bảng Payments
