@@ -25,10 +25,10 @@ const UserModel = {
 
     // Thêm một người dùng mới
     create: (user) => {
-        const query = 'INSERT INTO Users (UserId, Name, Password, Email, Phone, Role, CreateAt, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        const { UserId, Name, Password, Email, Phone, Role, CreateAt, Status } = user;
+        const query = 'INSERT INTO Users (Name, Password, Email, Phone, Role, CreateAt, Status) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const { Name, Password, Email, Phone, Role, CreateAt, Status } = user;
         return new Promise((resolve, reject) => {
-            db.query(query, [UserId, Name, Password, Email, Phone, Role, CreateAt, Status], (err, results) => {
+            db.query(query, [Name, Password, Email, Phone, Role, CreateAt, Status], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

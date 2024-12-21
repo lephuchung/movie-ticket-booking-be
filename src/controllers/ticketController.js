@@ -26,9 +26,9 @@ const getTicketById = async (req, res) => {
 
 // Thêm một vé mới
 const createTicket = async (req, res) => {
-    const { TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = req.body;
+    const { SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = req.body;
     try {
-        const result = await TicketModel.create({ TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId });
+        const result = await TicketModel.create({ SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId });
         res.status(201).json({ message: 'Ticket created successfully', ticket: result });
     } catch (err) {
         res.status(500).json({ error: 'Failed to create ticket', details: err });

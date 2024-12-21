@@ -26,9 +26,9 @@ const getSeatById = async (req, res) => {
 
 // Thêm một ghế mới
 const createSeat = async (req, res) => {
-    const { SeatId, SeatNumber, Line, RoomId } = req.body;
+    const { SeatNumber, Line, RoomId } = req.body;
     try {
-        const result = await SeatModel.create({ SeatId, SeatNumber, Line, RoomId });
+        const result = await SeatModel.create({ SeatNumber, Line, RoomId });
         res.status(201).json({ message: 'Ghế đã được tạo thành công', seat: result });
     } catch (err) {
         res.status(500).json({ error: 'Không thể tạo ghế', details: err });

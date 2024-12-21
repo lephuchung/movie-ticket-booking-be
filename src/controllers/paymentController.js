@@ -26,8 +26,8 @@ const getPaymentById = async (req, res) => {
 
 // Tạo mới một thanh toán
 const createPayment = async (req, res) => {
-    const { PaymentId, PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = req.body;
-    const payment = { PaymentId, PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId };
+    const { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = req.body;
+    const payment = { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId };
     try {
         const result = await PaymentModel.create(payment);
         res.status(201).json({ message: 'Payment created successfully', paymentId: result.insertId });

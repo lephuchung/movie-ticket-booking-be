@@ -26,9 +26,9 @@ const getTheaterById = async (req, res) => {
 
 // Thêm một rạp mới
 const createTheater = async (req, res) => {
-    const { TheaterId, Name, TotalRoom, Location } = req.body;
+    const { Name, TotalRoom, Location } = req.body;
     try {
-        const result = await TheaterModel.create({ TheaterId, Name, TotalRoom, Location });
+        const result = await TheaterModel.create({ Name, TotalRoom, Location });
         res.status(201).json({ message: 'Theater created successfully', theater: result });
     } catch (err) {
         res.status(500).json({ error: 'Failed to create theater', details: err });

@@ -25,10 +25,10 @@ const TicketModel = {
 
     // Thêm một vé mới
     create: (ticket) => {
-        const query = 'INSERT INTO Tickets (TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        const { TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = ticket;
+        const query = 'INSERT INTO Tickets (SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const { SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = ticket;
         return new Promise((resolve, reject) => {
-            db.query(query, [TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId], (err, results) => {
+            db.query(query, [SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

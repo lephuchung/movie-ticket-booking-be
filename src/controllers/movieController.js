@@ -128,9 +128,9 @@ const getMovieById = async (req, res) => {
 
 // Thêm một phim mới
 const createMovie = async (req, res) => {
-    const { MovieId, Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl } = req.body;
+    const { Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl } = req.body;
     try {
-        const result = await MovieModel.create({ MovieId, Title, Genre, Duration, ReleaseDate, Rating, Description, Director, PosterUrl });
+        const result = await MovieModel.create({ Title, Genre, Duration, ReleaseDate, Rating, Description, Director, PosterUrl });
         res.status(201).json({ message: 'Phim đã được tạo thành công', movie: result });
     } catch (err) {
         res.status(500).json({ error: 'Không thể tạo phim', details: err });
