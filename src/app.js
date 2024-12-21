@@ -6,6 +6,7 @@ const theaterRoutes = require('./routes/theaterRoutes')
 const userRoutes = require('./routes/userRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const roomRoutes = require('./routes/roomRoutes');
+const seatRoutes = require('./routes/seatRoutes');
 const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 
@@ -22,6 +23,7 @@ app.use(`${API_PREFIX}/theater`, theaterRoutes);
 app.use(`${API_PREFIX}/users`, userRoutes);
 app.use(`${API_PREFIX}/tickets`, ticketRoutes);
 app.use(`${API_PREFIX}/rooms`, roomRoutes);
+app.use(`${API_PREFIX}/seats`, seatRoutes);
 app.use(`${API_PREFIX}/auth`, authRoutes);
 
 // Khởi động server trên cổng 3000 hoặc cổng được cấu hình trong biến môi trường
