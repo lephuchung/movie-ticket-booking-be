@@ -22,10 +22,10 @@ const TheaterModel = {
     },
 
     create: (theater) => {
-        const query = 'INSERT INTO Theaters (TheaterId, Name, TotalRoom, Location) VALUES (?, ?, ?, ?)';
-        const { TheaterId, Name, TotalRoom, Location } = theater;
+        const query = 'INSERT INTO Theaters (Name, TotalRoom, Location) VALUES (?, ?, ?)';
+        const { Name, TotalRoom, Location } = theater;
         return new Promise((resolve, reject) => {
-            db.query(query, [TheaterId, Name, TotalRoom, Location], (err, results) => {
+            db.query(query, [Name, TotalRoom, Location], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

@@ -26,9 +26,9 @@ const getShowtimeById = async (req, res) => {
 
 // Thêm một suất chiếu mới
 const createShowtime = async (req, res) => {
-    const { ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = req.body;
+    const { StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = req.body;
     try {
-        const result = await ShowtimeModel.create({ howtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId });
+        const result = await ShowtimeModel.create({ StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId });
         res.status(201).json({ message: 'Suất chiếu đã được tạo thành công', showtime: result });
     } catch (err) {
         res.status(500).json({ error: 'Không thể tạo suất chiếu', details: err });

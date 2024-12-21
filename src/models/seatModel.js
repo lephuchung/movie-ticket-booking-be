@@ -22,10 +22,10 @@ const SeatModel = {
     },
 
     create: (seat) => {
-        const query = 'INSERT INTO Seats (SeatId, SeatNumber, Line, RoomId) VALUES (?, ?, ?, ?)';
-        const { SeatId, SeatNumber, Line, RoomId } = seat;
+        const query = 'INSERT INTO Seats (SeatNumber, Line, RoomId) VALUES (?, ?, ?)';
+        const { SeatNumber, Line, RoomId } = seat;
         return new Promise((resolve, reject) => {
-            db.query(query, [SeatId, SeatNumber, Line, RoomId], (err, results) => {
+            db.query(query, [SeatNumber, Line, RoomId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

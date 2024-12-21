@@ -23,9 +23,9 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-    const { UserId, Name, Password, Email, Phone, Role, CreateAt, Status } = req.body;
+    const { Name, Password, Email, Phone, Role, CreateAt, Status } = req.body;
     try {
-        const result = await UserModel.create({ UserId, Name, Password, Email, Phone, Role, CreateAt, Status });
+        const result = await UserModel.create({ Name, Password, Email, Phone, Role, CreateAt, Status });
         res.status(201).json({ message: 'User created successfully', user: result });
     } catch (err) {
         res.status(500).json({ error: 'Failed to create user', details: err });

@@ -26,8 +26,8 @@ const getRoomById = async (req, res) => {
 
 // Thêm một phòng mới
 const createRoom = async (req, res) => {
-    const { RoomId, TotalSeat, Name, TheaterId } = req.body;
-    const room = { RoomId, TotalSeat, Name, TheaterId };
+    const { TotalSeat, Name, TheaterId } = req.body;
+    const room = { TotalSeat, Name, TheaterId };
     try {
         const result = await RoomModel.create(room);
         res.status(201).json({ message: 'Room created successfully', roomId: result.insertId });

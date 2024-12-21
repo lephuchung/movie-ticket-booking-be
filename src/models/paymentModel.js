@@ -23,13 +23,13 @@ const PaymentModel = {
 
     create: (payment) => {
         const query = `
-            INSERT INTO Payments (PaymentId, PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO Payments (PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId)
+            VALUES (?, ?, ?, ?, ?)
         `;
-        const { PaymentId, PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = payment;
+        const { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = payment;
 
         return new Promise((resolve, reject) => {
-            db.query(query, [PaymentId, PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId], (err, results) => {
+            db.query(query, [PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

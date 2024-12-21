@@ -22,10 +22,10 @@ const ShowtimeModel = {
     },
 
     create: (showtime) => {
-        const query = 'INSERT INTO Showtimes (ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        const { ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = showtime;
+        const query = 'INSERT INTO Showtimes (StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const { StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = showtime;
         return new Promise((resolve, reject) => {
-            db.query(query, [ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId], (err, results) => {
+            db.query(query, [StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

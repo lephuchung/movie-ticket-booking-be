@@ -117,10 +117,10 @@ const MovieModel = {
     },
 
     create: (movie) => {
-        const query = 'INSERT INTO Movies (MovieId, Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-        const { MovieId, Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl } = movie;
+        const query = 'INSERT INTO Movies (Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const { Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl } = movie;
         return new Promise((resolve, reject) => {
-            db.query(query, [MovieId, Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl], (err, results) => {
+            db.query(query, [Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
