@@ -14,13 +14,13 @@ exports.signup = async (req, res) => {
         if (password.length < 8) {
             return res.status(400).json({ error: 'Mật khẩu phải có ít nhất 8 ký tự' });
         }
-        const hashedPassword = await bcrypt.hash(password, 8);
-        const user = await User.create({ name, email, phoneNumber, password: hashedPassword });
+        const hashedPassword = await bcrypt.hash(password, 12);
+        const user = await Users.create({ name, email, phoneNumber, password: hashedPassword });
 
         const token = jwt.sign(
             { userId: user.user_id },
             process.env.JWT_SECRET,
-            { expiresIn: 3600 }
+            { expiresIn: '1h' }
         );
 
         res.status(200).json({
