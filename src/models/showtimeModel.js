@@ -22,10 +22,10 @@ const ShowtimeModel = {
     },
 
     create: (showtime) => {
-        const query = 'INSERT INTO Showtimes (ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice) VALUES (?, ?, ?, ?, ?)';
-        const { ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice } = showtime;
+        const query = 'INSERT INTO Showtimes (ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const { ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = showtime;
         return new Promise((resolve, reject) => {
-            db.query(query, [ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice], (err, results) => {
+            db.query(query, [ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -33,10 +33,10 @@ const ShowtimeModel = {
     },
 
     update: (id, showtime) => {
-        const query = 'UPDATE Showtimes SET MovieId = ?, RoomId = ?, ShowtimeTime = ?, TicketPrice = ? WHERE ShowtimeId = ?';
-        const { MovieId, RoomId, ShowtimeTime, TicketPrice } = showtime;
+        const query = 'UPDATE Showtimes SET StartTime = ?, EndTime = ?, SeatStatus = ?, Price = ?, TheaterId = ?, RoomId = ?, MovieId = ? WHERE ShowtimeId = ?';
+        const { StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = showtime;
         return new Promise((resolve, reject) => {
-            db.query(query, [MovieId, RoomId, ShowtimeTime, TicketPrice, id], (err, results) => {
+            db.query(query, [StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId, id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

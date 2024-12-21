@@ -23,9 +23,9 @@ const getUserById = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-    const { UserId, Username, Email, Password, Role } = req.body;
+    const { UserId, Name, Password, Email, Phone, Role, CreateAt, Status } = req.body;
     try {
-        const result = await UserModel.create({ UserId, Username, Email, Password, Role });
+        const result = await UserModel.create({ UserId, Name, Password, Email, Phone, Role, CreateAt, Status });
         res.status(201).json({ message: 'User created successfully', user: result });
     } catch (err) {
         res.status(500).json({ error: 'Failed to create user', details: err });
@@ -34,9 +34,9 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { Username, Email, Password, Role } = req.body;
+    const { Name, Password, Email, Phone, Role, CreateAt, Status } = req.body;
     try {
-        const result = await UserModel.update(id, { Username, Email, Password, Role });
+        const result = await UserModel.update(id, { Name, Password, Email, Phone, Role, CreateAt, Status });
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'User not found' });
         }

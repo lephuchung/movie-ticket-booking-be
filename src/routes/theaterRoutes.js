@@ -7,6 +7,9 @@ const {
     deleteTheater,
 } = require('../controllers/theaterController');
 
+// router.get('/locations', movieController.getLocations); viết lại trong theater
+// router.get('/showing_movie/:title', movieController.getTheatersShowingMovieNationwide); viết lại trông theater
+
 const router = express.Router();
 
 router.get('/', getAllTheaters);
