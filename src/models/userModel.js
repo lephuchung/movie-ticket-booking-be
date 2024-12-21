@@ -25,10 +25,10 @@ const UserModel = {
 
     // Thêm một người dùng mới
     create: (user) => {
-        const query = 'INSERT INTO Users (UserId, Username, Email, Password, Role) VALUES (?, ?, ?, ?, ?)';
-        const { UserId, Username, Email, Password, Role } = user;
+        const query = 'INSERT INTO Users (UserId, Name, Password, Email, Phone, Role, CreateAt, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const { UserId, Name, Password, Email, Phone, Role, CreateAt, Status } = user;
         return new Promise((resolve, reject) => {
-            db.query(query, [UserId, Username, Email, Password, Role], (err, results) => {
+            db.query(query, [UserId, Name, Password, Email, Phone, Role, CreateAt, Status], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -37,10 +37,10 @@ const UserModel = {
 
     // Cập nhật thông tin người dùng
     update: (id, user) => {
-        const query = 'UPDATE Users SET Username = ?, Email = ?, Password = ?, Role = ? WHERE UserId = ?';
-        const { Username, Email, Password, Role } = user;
+        const query = 'UPDATE Users SET Name = ?, Password = ?, Email = ?, Phone = ?, Role = ?, CreateAt = ?, Status = ? WHERE UserId = ?';
+        const { Name, Password, Email, Phone, Role, CreateAt, Status } = user;
         return new Promise((resolve, reject) => {
-            db.query(query, [Username, Email, Password, Role, id], (err, results) => {
+            db.query(query, [Name, Password, Email, Phone, Role, CreateAt, Status, id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

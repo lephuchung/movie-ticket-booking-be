@@ -26,9 +26,9 @@ const getShowtimeById = async (req, res) => {
 
 // Thêm một suất chiếu mới
 const createShowtime = async (req, res) => {
-    const { ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice } = req.body;
+    const { ShowtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = req.body;
     try {
-        const result = await ShowtimeModel.create({ ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice });
+        const result = await ShowtimeModel.create({ howtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId });
         res.status(201).json({ message: 'Suất chiếu đã được tạo thành công', showtime: result });
     } catch (err) {
         res.status(500).json({ error: 'Không thể tạo suất chiếu', details: err });
@@ -38,9 +38,9 @@ const createShowtime = async (req, res) => {
 // Cập nhật thông tin suất chiếu
 const updateShowtime = async (req, res) => {
     const { id } = req.params;
-    const { MovieId, RoomId, ShowtimeTime, TicketPrice } = req.body;
+    const { StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = req.body;
     try {
-        const result = await ShowtimeModel.update(id, { MovieId, RoomId, ShowtimeTime, TicketPrice });
+        const result = await ShowtimeModel.update(id, { howtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId });
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Suất chiếu không tồn tại' });
         }

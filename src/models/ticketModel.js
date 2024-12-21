@@ -25,10 +25,10 @@ const TicketModel = {
 
     // Thêm một vé mới
     create: (ticket) => {
-        const query = 'INSERT INTO Tickets (TicketId, UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-        const { TicketId, UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime } = ticket;
+        const query = 'INSERT INTO Tickets (TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+        const { TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = ticket;
         return new Promise((resolve, reject) => {
-            db.query(query, [TicketId, UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime], (err, results) => {
+            db.query(query, [TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -37,10 +37,10 @@ const TicketModel = {
 
     // Cập nhật thông tin vé
     update: (id, ticket) => {
-        const query = 'UPDATE Tickets SET UserId = ?, ShowtimeId = ?, SeatNumber = ?, Room = ?, Price = ?, PaymentStatus = ?, BookingTime = ? WHERE TicketId = ?';
-        const { UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime } = ticket;
+        const query = 'UPDATE Tickets SET SeatNumber = ?, BookingTime = ?, TotalPrice = ?, PaymentStatus = ?, UserId = ?, ShowtimeId = ?, PaymentId = ? WHERE TicketId = ?';
+        const { SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = ticket;
         return new Promise((resolve, reject) => {
-            db.query(query, [UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime, id], (err, results) => {
+            db.query(query, [SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId, id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

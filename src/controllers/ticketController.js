@@ -26,9 +26,9 @@ const getTicketById = async (req, res) => {
 
 // Thêm một vé mới
 const createTicket = async (req, res) => {
-    const { TicketId, UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime } = req.body;
+    const { TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = req.body;
     try {
-        const result = await TicketModel.create({ TicketId, UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime });
+        const result = await TicketModel.create({ TicketId, SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId });
         res.status(201).json({ message: 'Ticket created successfully', ticket: result });
     } catch (err) {
         res.status(500).json({ error: 'Failed to create ticket', details: err });
@@ -38,9 +38,9 @@ const createTicket = async (req, res) => {
 // Cập nhật thông tin vé
 const updateTicket = async (req, res) => {
     const { id } = req.params;
-    const { UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime } = req.body;
+    const { SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId } = req.body;
     try {
-        const result = await TicketModel.update(id, { UserId, ShowtimeId, SeatNumber, Room, Price, PaymentStatus, BookingTime });
+        const result = await TicketModel.update(id, { SeatNumber, BookingTime, TotalPrice, PaymentStatus, UserId, ShowtimeId, PaymentId });
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Ticket not found' });
         }
