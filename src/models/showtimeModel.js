@@ -1,8 +1,8 @@
-const db = require('../db');
+const db = require('../config/db');
 
-const RoomModel = {
+const ShowtimeModel = {
     getAll: () => {
-        const query = 'SELECT * FROM Room';
+        const query = 'SELECT * FROM Showtimes';
         return new Promise((resolve, reject) => {
             db.query(query, (err, results) => {
                 if (err) return reject(err);
@@ -12,7 +12,7 @@ const RoomModel = {
     },
 
     getById: (id) => {
-        const query = 'SELECT * FROM Room WHERE RoomId = ?';
+        const query = 'SELECT * FROM Showtimes WHERE ShowtimeId = ?';
         return new Promise((resolve, reject) => {
             db.query(query, [id], (err, results) => {
                 if (err) return reject(err);
@@ -21,22 +21,22 @@ const RoomModel = {
         });
     },
 
-    create: (room) => {
-        const query = 'INSERT INTO Rooms (RoomId, Name, Capacity, TheaterId) VALUES (?, ?, ?, ?)';
-        const { RoomId, Name, Capacity, TheaterId } = room;
+    create: (showtime) => {
+        const query = 'INSERT INTO Showtimes (ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice) VALUES (?, ?, ?, ?, ?)';
+        const { ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice } = showtime;
         return new Promise((resolve, reject) => {
-            db.query(query, [RoomId, Name, Capacity, TheaterId], (err, results) => {
+            db.query(query, [ShowtimeId, MovieId, RoomId, ShowtimeTime, TicketPrice], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
     },
 
-    update: (id, room) => {
-        const query = 'UPDATE Rooms SET Name = ?, Capacity = ?, TheaterId = ? WHERE RoomId = ?';
-        const { Name, Capacity, TheaterId } = room;
+    update: (id, showtime) => {
+        const query = 'UPDATE Showtimes SET MovieId = ?, RoomId = ?, ShowtimeTime = ?, TicketPrice = ? WHERE ShowtimeId = ?';
+        const { MovieId, RoomId, ShowtimeTime, TicketPrice } = showtime;
         return new Promise((resolve, reject) => {
-            db.query(query, [Name, Capacity, TheaterId, id], (err, results) => {
+            db.query(query, [MovieId, RoomId, ShowtimeTime, TicketPrice, id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -44,7 +44,7 @@ const RoomModel = {
     },
 
     delete: (id) => {
-        const query = 'DELETE FROM Room WHERE RoomId = ?';
+        const query = 'DELETE FROM Showtimes WHERE ShowtimeId = ?';
         return new Promise((resolve, reject) => {
             db.query(query, [id], (err, results) => {
                 if (err) return reject(err);
@@ -54,4 +54,4 @@ const RoomModel = {
     },
 };
 
-module.exports = RoomModel;
+module.exports = ShowtimeModel;
