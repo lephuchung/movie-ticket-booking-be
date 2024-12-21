@@ -10,6 +10,7 @@ const seatRoutes = require('./routes/seatRoutes');
 const showtimeRoutes = require('./routes/showtimeRoutes');
 const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
+ const bookingRoutes = require('./routes/bookingRoutes');
 
 const app = express();
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use(`${API_PREFIX}/rooms`, roomRoutes);
 app.use(`${API_PREFIX}/seats`, seatRoutes);
 app.use(`${API_PREFIX}/showtimes`, showtimeRoutes);
 app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use('${API_PREFIX}/bookings', bookingRoutes);
 
 // Khởi động server trên cổng 3000 hoặc cổng được cấu hình trong biến môi trường
 const PORT = process.env.PORT || 3000;
