@@ -18,6 +18,7 @@ const API_PREFIX = '';
 app.use(`${API_PREFIX}/movies`, movieRoutes);
 app.use(`${API_PREFIX}/theater`, theaterRoutes);
 app.use(`${API_PREFIX}/users`, userRoutes);
+app.use(`${API_PREFIX}/tickets`, ticketRoutes);
 app.use(`${API_PREFIX}/auth`, authRoutes);
 
 // Khởi động server trên cổng 3000 hoặc cổng được cấu hình trong biến môi trường
