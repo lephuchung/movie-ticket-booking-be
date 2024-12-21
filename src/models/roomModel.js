@@ -1,8 +1,8 @@
-const db = require('../config/db');
+const db = require('../db');
 
-const TheaterModel = {
+const RoomModel = {
     getAll: () => {
-        const query = 'SELECT * FROM Theaters';
+        const query = 'SELECT * FROM Room';
         return new Promise((resolve, reject) => {
             db.query(query, (err, results) => {
                 if (err) return reject(err);
@@ -12,7 +12,7 @@ const TheaterModel = {
     },
 
     getById: (id) => {
-        const query = 'SELECT * FROM Theaters WHERE TheaterId = ?';
+        const query = 'SELECT * FROM Room WHERE RoomId = ?';
         return new Promise((resolve, reject) => {
             db.query(query, [id], (err, results) => {
                 if (err) return reject(err);
@@ -21,22 +21,20 @@ const TheaterModel = {
         });
     },
 
-    create: (theater) => {
-        const query = 'INSERT INTO Theaters (TheaterId, Name, TotalRoom, Location) VALUES (?, ?, ?, ?)';
-        const { TheaterId, Name, TotalRoom, Location } = theater;
+    create: (room) => {
+        const query = 'INSERT INTO Room SET ?';
         return new Promise((resolve, reject) => {
-            db.query(query, [TheaterId, Name, TotalRoom, Location], (err, results) => {
+            db.query(query, room, (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
     },
 
-    update: (id, theater) => {
-        const query = 'UPDATE Theaters SET Name = ?, TotalRoom = ?, Location = ? WHERE TheaterId = ?';
-        const { Name, TotalRoom, Location } = theater;
+    update: (id, room) => {
+        const query = 'UPDATE Room SET ? WHERE RoomId = ?';
         return new Promise((resolve, reject) => {
-            db.query(query, [Name, TotalRoom, Location, id], (err, results) => {
+            db.query(query, [room, id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -44,7 +42,7 @@ const TheaterModel = {
     },
 
     delete: (id) => {
-        const query = 'DELETE FROM Theaters WHERE TheaterId = ?';
+        const query = 'DELETE FROM Room WHERE RoomId = ?';
         return new Promise((resolve, reject) => {
             db.query(query, [id], (err, results) => {
                 if (err) return reject(err);
@@ -54,4 +52,4 @@ const TheaterModel = {
     },
 };
 
-module.exports = TheaterModel;
+module.exports = RoomModel;

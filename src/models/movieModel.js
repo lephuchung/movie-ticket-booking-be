@@ -1,4 +1,4 @@
-const db = require('../db'); // Kết nối cơ sở dữ liệu
+const db = require('../config/db'); // Kết nối cơ sở dữ liệu
 
 // Truy vấn SQL để lấy tất cả các phim đang chiếu
 exports.getNowShowing = (callback) => {

@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../config/db');
 
 const TicketModel = {
     // Lấy danh sách tất cả vé

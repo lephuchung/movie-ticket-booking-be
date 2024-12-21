@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const db = require('../db');
+const db = require('../config/db');
 const { blacklistedTokens } = require('../config/tokenBlackList');
 
 
