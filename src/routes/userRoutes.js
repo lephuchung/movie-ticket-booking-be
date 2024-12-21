@@ -1,10 +1,18 @@
 const express = require('express');
-const router = express.Router();
-const userController = require('../controllers/userController');
+const {
+    getAllUsers,
+    getUserById,
+    createUser,
+    updateUser,
+    deleteUser,
+} = require('../controllers/userController');
 
-// Định nghĩa các route và liên kết đến các controller
-router.get('/:username', userController.getUserDetails);
-router.get('/:username/tickets', userController.getUserTickets);
-router.get('/ticket/:ticketId', userController.getTicketDetails);
+const router = express.Router();
+
+router.get('/', getAllUsers);
+router.get('/:id', getUserById);
+router.post('/', createUser);
+router.put('/:id', updateUser);
+router.delete('/:id', deleteUser);
 
 module.exports = router;
