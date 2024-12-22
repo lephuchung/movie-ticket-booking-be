@@ -231,5 +231,20 @@ const MovieModel = {
             });
         });
     },
+
+    getMovieDetailsByTitle: (title) => {
+        const query = `
+            SELECT 
+                MovieId, Title, Description, Genre, ReleaseDate, Rating, Duration, Director, PosterUrl
+            FROM Movies
+            WHERE Title = ?;
+        `;
+        return new Promise((resolve, reject) => {
+            db.query(query, [title], (err, results) => {
+                if (err) return reject(err);
+                resolve(results[0]); // Chỉ cần một kết quả
+            });
+        });
+    },
 }
 module.exports = MovieModel;

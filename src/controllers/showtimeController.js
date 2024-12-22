@@ -108,7 +108,7 @@ const getShowtimesForMovieInThreeDaysInLocation = async (req, res) => {
     const { movieId, location } = req.params;
 
     try {
-        const showtimes = await MovieModel.getShowtimesForMovieInThreeDaysInLocation(movieId, location);
+        const showtimes = await ShowtimeModel.getShowtimesForMovieInThreeDaysInLocation(movieId, location);
         if (showtimes.length === 0) {
             return res.status(404).json({ message: 'No showtimes found for this movie in the next 3 days in this location' });
         }
@@ -123,7 +123,7 @@ const getShowtimesForMovieInThreeDays = async (req, res) => {
     const { movieId } = req.params;
 
     try {
-        const showtimes = await MovieModel.getShowtimesForMovieInThreeDays(movieId);
+        const showtimes = await ShowtimeModel.getShowtimesForMovieInThreeDays(movieId);
         if (showtimes.length === 0) {
             return res.status(404).json({ message: 'No showtimes found for this movie in the next 3 days' });
         }
