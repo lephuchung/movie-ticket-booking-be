@@ -64,10 +64,52 @@ const deleteShowtime = async (req, res) => {
     }
 };
 
+// Lấy tất cả các suất chiếu của một phim tại một tỉnh trong một khoảng thời gian
+const getShowtimesForMovieByLocationAndTimeRange = async (req, res) => {
+    const { movieId, location, startTime, endTime } = req.params;
+
+    try {
+        const showtimes = await ShowtimeModel.getShowtimesForMovieByLocationAndTimeRange(movieId, location, startTime, endTime);
+
+        if (showtimes.length === 0) {
+            return res.status(404).json({ message: 'No showtimes found for the given criteria' });
+        }
+
+        res.status(200).json(showtimes);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch showtimes',
+            details: err.message,
+        });
+    }
+};
+
+// Lấy tất cả suất chiếu của một phim trong khoảng thời gian theo movieId
+const getShowtimesForMovieByTimeRange = async (req, res) => {
+    const { movieId, startTime, endTime } = req.params;
+
+    try {
+        const showtimes = await ShowtimeModel.getShowtimesForMovieByTimeRange(movieId, startTime, endTime);
+
+        if (showtimes.length === 0) {
+            return res.status(404).json({ message: 'No showtimes found for the given criteria' });
+        }
+
+        res.status(200).json(showtimes);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch showtimes',
+            details: err.message,
+        });
+    }
+};
+
 module.exports = {
     getAllShowtimes,
     getShowtimeById,
     createShowtime,
     updateShowtime,
     deleteShowtime,
+    getShowtimesForMovieByLocationAndTimeRange,
+    getShowtimesForMovieByTimeRange,
 };
