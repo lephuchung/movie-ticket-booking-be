@@ -10,12 +10,14 @@ const {
 
 const router = express.Router();
 
+// Lấy ticket được đặt bởi một người
+router.get('/user/:email', getTicketsByUserEmail);
+
 router.get('/', getAllTickets);
 router.get('/:id', getTicketById);
 router.post('/', createTicket);
 router.put('/:id', updateTicket);
 router.delete('/:id', deleteTicket);
-// Lấy ticket được đặt bởi một người
-router.get('/user/:email', getTicketsByUserEmail);
+
 
 module.exports = router;

@@ -9,18 +9,22 @@ const {
     deleteMovie,
     getMoviesCurrentlyShowing,
     getMoviesCurrentlyShowingByLocation,
+    getMoviesCurrentlyShowingInThreeDay,
+    getMoviesCurrentlyShowingByLocationInThreeDay,
     getAllGenres,
     getMoviesByGenre,
 } = require('../controllers/movieController');
 
+router.get('/currently-showing-in-three-day', getMoviesCurrentlyShowingInThreeDay);
+router.get('/currently-showing-in-three-day/location/:location', getMoviesCurrentlyShowingByLocationInThreeDay);
+router.get('/currently-showing', getMoviesCurrentlyShowing);
+router.get('/currently-showing/location/:location', getMoviesCurrentlyShowingByLocation);
+router.get('/genres', getAllGenres);
+router.get('/genre/:genre', getMoviesByGenre);
 router.get('/', getAllMovies);
 router.get('/:id', getMovieById);
 router.post('/', createMovie);
 router.put('/:id', updateMovie);
 router.delete('/:id', deleteMovie);
-router.get('/currently-showing', getMoviesCurrentlyShowing);
-router.get('/currently-showing/location/:location', getMoviesCurrentlyShowingByLocation);
-router.get('/genres', getAllGenres);
-router.get('/genre/:genre', getMoviesByGenre);
 
 module.exports = router;

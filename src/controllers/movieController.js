@@ -220,6 +220,33 @@ const getMoviesCurrentlyShowingByLocation = async (req, res) => {
     }
 };
 
+// Lấy phim đang chiếu tại một thành phố trong 3 ngày tiếp theo
+const getMoviesCurrentlyShowingByLocationInThreeDay = async (req, res) => {
+    const { location } = req.params;
+    try {
+        const movies = await MovieModel.getMoviesCurrentlyShowingByLocationInThreeDay(location);
+        if (movies.length === 0) {
+            return res.status(404).json({ message: 'No movies found for the given location in the next 3 days' });
+        }
+        res.status(200).json(movies);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch movies by location in the next 3 days', details: err });
+    }
+};
+
+// Lấy phim đang chiếu tại trong 3 ngày tiếp theo
+const getMoviesCurrentlyShowingInThreeDay = async (req, res) => {
+    try {
+        const movies = await MovieModel.getMoviesCurrentlyShowingInThreeDay();
+        if (movies.length === 0) {
+            return res.status(404).json({ message: 'No movies found in the next 3 days' });
+        }
+        res.status(200).json(movies);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch movies in the next 3 days', details: err });
+    }
+};
+
 module.exports = {
     getAllMovies,
     getMovieById,
@@ -227,7 +254,9 @@ module.exports = {
     updateMovie,
     deleteMovie,
     getMoviesCurrentlyShowing,
+    getMoviesCurrentlyShowingInThreeDay,
     getMoviesCurrentlyShowingByLocation,
+    getMoviesCurrentlyShowingByLocationInThreeDay,
     getMoviesByGenre,
     getAllGenres,
 };

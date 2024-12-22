@@ -64,7 +64,7 @@ const ShowtimeModel = {
             WHERE s.MovieId = ?
               AND t.Location = ?
               AND s.StartTime >= ?
-              AND s.EndTime <= ?
+              AND s.StartTime <= ?               
             ORDER BY s.StartTime
         `;
 
@@ -85,13 +85,47 @@ const ShowtimeModel = {
             JOIN Theaters t ON s.TheaterId = t.TheaterId
             JOIN Room r ON s.RoomId = r.RoomId
             WHERE s.MovieId = ?
-              AND s.StartTime >= ?
-              AND s.EndTime <= ?
+              AND s.StartTime >= ?              
             ORDER BY s.StartTime
         `;
 
         return new Promise((resolve, reject) => {
-            db.query(query, [movieId, startTime, endTime], (err, results) => {
+            db.query(query, [movieId, startTime], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    getShowtimesForMovieInThreeDaysInLocation: (movieId, location) => {
+        const query = `
+            SELECT s.ShowtimeId, s.StartTime, s.EndTime, s.Price, s.SeatStatus, t.Name AS TheaterName, r.Name AS RoomName
+            FROM Showtimes s
+            JOIN Theaters t ON s.TheaterId = t.TheaterId
+            JOIN Room r ON s.RoomId = r.RoomId
+            WHERE s.MovieId = ? 
+            AND t.Location = ? 
+            AND s.StartTime BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 DAY);
+        `;
+        return new Promise((resolve, reject) => {
+            db.query(query, [movieId, location], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    getShowtimesForMovieInThreeDays: (movieId) => {
+        const query = `
+            SELECT s.ShowtimeId, s.StartTime, s.EndTime, s.Price, s.SeatStatus, t.Name AS TheaterName, r.Name AS RoomName, t.Location
+            FROM Showtimes s
+            JOIN Theaters t ON s.TheaterId = t.TheaterId
+            JOIN Room r ON s.RoomId = r.RoomId
+            WHERE s.MovieId = ? 
+            AND s.StartTime BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 DAY);
+        `;
+        return new Promise((resolve, reject) => {
+            db.query(query, [movieId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });

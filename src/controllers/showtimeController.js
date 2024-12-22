@@ -87,7 +87,6 @@ const getShowtimesForMovieByLocationAndTimeRange = async (req, res) => {
 // Lấy tất cả suất chiếu của một phim trong khoảng thời gian theo movieId
 const getShowtimesForMovieByTimeRange = async (req, res) => {
     const { movieId, startTime, endTime } = req.params;
-
     try {
         const showtimes = await ShowtimeModel.getShowtimesForMovieByTimeRange(movieId, startTime, endTime);
 
@@ -104,6 +103,37 @@ const getShowtimesForMovieByTimeRange = async (req, res) => {
     }
 };
 
+// Lấy tất cả các suất chiếu của một phim tại một tỉnh trong 3 ngày tới
+const getShowtimesForMovieInThreeDaysInLocation = async (req, res) => {
+    const { movieId, location } = req.params;
+
+    try {
+        const showtimes = await MovieModel.getShowtimesForMovieInThreeDaysInLocation(movieId, location);
+        if (showtimes.length === 0) {
+            return res.status(404).json({ message: 'No showtimes found for this movie in the next 3 days in this location' });
+        }
+        res.status(200).json(showtimes);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch showtimes', details: err });
+    }
+};
+
+// Lấy tất cả các suất chiếu của một phim trong 3 ngày tới
+const getShowtimesForMovieInThreeDays = async (req, res) => {
+    const { movieId } = req.params;
+
+    try {
+        const showtimes = await MovieModel.getShowtimesForMovieInThreeDays(movieId);
+        if (showtimes.length === 0) {
+            return res.status(404).json({ message: 'No showtimes found for this movie in the next 3 days' });
+        }
+        res.status(200).json(showtimes);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch showtimes', details: err });
+    }
+};
+
+
 module.exports = {
     getAllShowtimes,
     getShowtimeById,
@@ -112,4 +142,6 @@ module.exports = {
     deleteShowtime,
     getShowtimesForMovieByLocationAndTimeRange,
     getShowtimesForMovieByTimeRange,
+    getShowtimesForMovieInThreeDaysInLocation,
+    getShowtimesForMovieInThreeDays,
 };
