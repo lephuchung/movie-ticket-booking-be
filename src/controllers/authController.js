@@ -3,51 +3,86 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 const { blacklistedTokens } = require('../config/tokenBlackList');
 
-
 // Đăng kí
 exports.signup = async (req, res) => {
-    const { name, email, phoneNumber, password } = req.body;
+    const { name, email, phone, password } = req.body;
+
     try {
-        if (!name || !email || !password) {
-            return res.status(400).json({ error: 'Name, email, and password are required' });
+        // Kiểm tra dữ liệu đầu vào
+        if (!name || !email || !phone || !password) {
+            return res.status(400).json({ error: 'Name, email, phone number, and password are required' });
         }
         if (password.length < 8) {
-            return res.status(400).json({ error: 'Mật khẩu phải có ít nhất 8 ký tự' });
+            return res.status(400).json({ error: 'Password must be at least 8 characters long' });
         }
-        const hashedPassword = await bcrypt.hash(password, 12);
-        const user = await Users.create({ name, email, phoneNumber, password: hashedPassword });
 
-        const token = jwt.sign(
-            { userId: user.user_id },
-            process.env.JWT_SECRET,
-            { expiresIn: '1h' }
-        );
-
-        res.status(200).json({
-            success: true,
-            message: 'Registration successful',
-            token,
-            user: {
-                id: user.user_id,
-                name: user.name,
-                email: user.email
+        // Kiểm tra email và số điện thoại trùng lặp
+        const duplicateCheckQuery = `
+            SELECT * FROM Users 
+            WHERE Email = ? OR Phone = ?
+        `;
+        db.query(duplicateCheckQuery, [email, phone], async (err, results) => {
+            if (err) {
+                console.error('Database query error:', err);
+                return res.status(500).json({ error: 'Database query error' });
             }
+
+            if (results.length > 0) {
+                // Phản hồi nếu email hoặc số điện thoại đã tồn tại
+                const existingField = results[0].Email === email ? 'Email' : 'Phone number';
+                return res.status(400).json({ error: `${existingField} already exists` });
+            }
+
+            // Mã hóa mật khẩu
+            const hashedPassword = await bcrypt.hash(password, 12);
+            const role = "customer";
+            const status = "active";
+            const createAt = new Date();
+
+            // Thêm người dùng vào cơ sở dữ liệu
+            const insertQuery = `
+                INSERT INTO Users (Name, Password, Email, Phone, Role, CreateAt, Status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            `;
+            db.query(insertQuery, [name, hashedPassword, email, phone, role, createAt, status], (err, results) => {
+                if (err) {
+                    console.error('Database query error:', err);
+                    return res.status(500).json({ error: 'Database query error' });
+                }
+
+                // Tạo token JWT
+                const token = jwt.sign(
+                    { userId: results.insertId },
+                    process.env.JWT_SECRET,
+                    { expiresIn: '1h' }
+                );
+
+                // Phản hồi thành công
+                res.status(201).json({
+                    success: true,
+                    message: 'Registration successful',
+                    token,
+                    user: {
+                        id: results.insertId,
+                        name,
+                        email,
+                        phone,
+                        role,
+                        status,
+                        createAt
+                    }
+                });
+            });
         });
     } catch (error) {
         console.error('Error during sign-up:', error);
-        if (error.name === 'SequelizeUniqueConstraintError') {
-            const field = error.errors[0].path.charAt(0).toUpperCase() + error.errors[0].path.slice(1);
-            const message = `${field} này đã được sử dụng`;
-            return res.status(400).json({ error: message });
-        }
-
         res.status(500).json({ error: 'Internal server error' });
     }
-}
+};
+
 // Đăng nhập
 exports.signin = async (req, res) => {
     const { email, password } = req.body;
-    console.log("server check req.body: ", req.body);
 
     db.query('SELECT * FROM Users WHERE Email = ?', [email], async (err, results) => {
         if (err) return res.status(500).json({ error: 'Database query error' });
