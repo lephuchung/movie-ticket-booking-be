@@ -247,6 +247,21 @@ const getMoviesCurrentlyShowingInThreeDay = async (req, res) => {
     }
 };
 
+// Lấy chi tiết một phim bằng tên phim
+const getMovieDetailsByTitle = async (req, res) => {
+    const { title } = req.params;
+
+    try {
+        const movie = await MovieModel.getMovieDetailsByTitle(title);
+        if (!movie) {
+            return res.status(404).json({ message: 'Movie not found' });
+        }
+        res.status(200).json(movie);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch movie details', details: err });
+    }
+};
+
 module.exports = {
     getAllMovies,
     getMovieById,
@@ -259,5 +274,6 @@ module.exports = {
     getMoviesCurrentlyShowingByLocationInThreeDay,
     getMoviesByGenre,
     getAllGenres,
+    getMovieDetailsByTitle,
 };
 

@@ -13,6 +13,7 @@ const {
     getMoviesCurrentlyShowingByLocationInThreeDay,
     getAllGenres,
     getMoviesByGenre,
+    getMovieDetailsByTitle,
 } = require('../controllers/movieController');
 
 router.get('/currently-showing-in-three-day', getMoviesCurrentlyShowingInThreeDay);
@@ -21,6 +22,7 @@ router.get('/currently-showing', getMoviesCurrentlyShowing);
 router.get('/currently-showing/location/:location', getMoviesCurrentlyShowingByLocation);
 router.get('/genres', getAllGenres);
 router.get('/genre/:genre', getMoviesByGenre);
+router.get('/details/:title', getMovieDetailsByTitle);
 router.get('/', getAllMovies);
 router.get('/:id', getMovieById);
 router.post('/', createMovie);
