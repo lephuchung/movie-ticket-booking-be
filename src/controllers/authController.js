@@ -106,8 +106,7 @@ exports.signin = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_REFRESH_EXPIRATION }
         );
-        const userEmail = user.Email
-        res.json({ accessToken, refreshToken, userEmail });
+        res.json({ accessToken, refreshToken, user });
     });
 };
 

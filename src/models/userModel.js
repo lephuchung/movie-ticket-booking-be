@@ -57,6 +57,17 @@ const UserModel = {
             });
         });
     },
+
+    // Cập nhật mật khẩu
+    updatePassword: (id, newPassword) => {
+        const query = "UPDATE Users SET Password = ? WHERE UserId = ?";
+        return new Promise((resolve, reject) => {
+            db.query(query, [newPassword, id], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
 };
 
 module.exports = UserModel;
