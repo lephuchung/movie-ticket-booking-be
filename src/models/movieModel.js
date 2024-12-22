@@ -199,5 +199,37 @@ const MovieModel = {
         });
 
     },
+
+    getMoviesCurrentlyShowingByLocationInThreeDay: (location) => {
+        const query = `
+            SELECT DISTINCT m.MovieId, m.Title, m.Description, m.Genre, m.ReleaseDate, m.Rating, m.Duration, m.Director, m.PosterUrl
+            FROM Movies m
+            JOIN Showtimes s ON m.MovieId = s.MovieId
+            JOIN Theaters t ON s.TheaterId = t.TheaterId
+            WHERE t.Location = ? 
+            AND s.StartTime BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 DAY);
+        `;
+        return new Promise((resolve, reject) => {
+            db.query(query, [location], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    getMoviesCurrentlyShowingInThreeDay: () => {
+        const query = `
+            SELECT DISTINCT m.MovieId, m.Title, m.Description, m.Genre, m.ReleaseDate, m.Rating, m.Duration, m.Director, m.PosterUrl
+            FROM Movies m
+            JOIN Showtimes s ON m.MovieId = s.MovieId
+            WHERE s.StartTime BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 DAY);
+        `;
+        return new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
 }
 module.exports = MovieModel;
