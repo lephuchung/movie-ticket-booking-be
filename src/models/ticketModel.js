@@ -61,11 +61,33 @@ const TicketModel = {
     // Lấy vé được đặt bởi một người
     getByUserEmail: (email) => {
         const query = `
-          SELECT t.* 
-          FROM Tickets t
-          JOIN Users u ON t.UserId = u.UserId
-          WHERE u.Email = ?
-        `;
+            SELECT 
+                t.TicketId, 
+                t.SeatNumber, 
+                t.BookingTime, 
+                t.TotalPrice, 
+                t.PaymentStatus, 
+                m.Title AS MovieTitle, 
+                s.StartTime AS Showtime, 
+                r.Name AS RoomName, 
+                th.Name AS TheaterName
+            FROM 
+                Tickets t
+            INNER JOIN 
+                Users u ON t.UserId = u.UserId
+            INNER JOIN 
+                Showtimes s ON t.ShowtimeId = s.ShowtimeId
+            INNER JOIN 
+                Movies m ON s.MovieId = m.MovieId
+            INNER JOIN 
+                Room r ON s.RoomId = r.RoomId
+            INNER JOIN 
+                Theaters th ON s.TheaterId = th.TheaterId
+            WHERE 
+                u.Email = ?
+            ORDER BY 
+                t.BookingTime DESC;
+    `;
         return new Promise((resolve, reject) => {
             db.query(query, [email], (err, results) => {
                 if (err) return reject(err);
