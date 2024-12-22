@@ -52,6 +52,51 @@ const ShowtimeModel = {
             });
         });
     },
+
+    getShowtimesForMovieByLocationAndTimeRange: (movieId, location, startTime, endTime) => {
+        const query = `
+            SELECT s.ShowtimeId, s.StartTime, s.EndTime, s.Price, 
+                   t.TheaterId, t.Name AS TheaterName, t.Location, 
+                   r.RoomId, r.Name AS RoomName
+            FROM Showtimes s
+            JOIN Theaters t ON s.TheaterId = t.TheaterId
+            JOIN Room r ON s.RoomId = r.RoomId
+            WHERE s.MovieId = ?
+              AND t.Location = ?
+              AND s.StartTime >= ?
+              AND s.EndTime <= ?
+            ORDER BY s.StartTime
+        `;
+
+        return new Promise((resolve, reject) => {
+            db.query(query, [movieId, location, startTime, endTime], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    getShowtimesForMovieByTimeRange: (movieId, startTime, endTime) => {
+        const query = `
+            SELECT s.ShowtimeId, s.StartTime, s.EndTime, s.Price, 
+                   t.TheaterId, t.Name AS TheaterName, t.Location, 
+                   r.RoomId, r.Name AS RoomName
+            FROM Showtimes s
+            JOIN Theaters t ON s.TheaterId = t.TheaterId
+            JOIN Room r ON s.RoomId = r.RoomId
+            WHERE s.MovieId = ?
+              AND s.StartTime >= ?
+              AND s.EndTime <= ?
+            ORDER BY s.StartTime
+        `;
+
+        return new Promise((resolve, reject) => {
+            db.query(query, [movieId, startTime, endTime], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
 };
 
 module.exports = ShowtimeModel;

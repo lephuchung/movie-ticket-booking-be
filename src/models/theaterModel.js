@@ -52,6 +52,31 @@ const TheaterModel = {
             });
         });
     },
+
+    getLocations: () => {
+        const query = 'SELECT DISTINCT Location FROM Theaters';
+        return new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
+
+    getTheatersShowingMovie: (MovieId) => {
+        const query = `
+            SELECT DISTINCT t.TheaterId, t.Name, t.Location
+            FROM Theaters t
+            JOIN Showtimes s ON t.TheaterId = s.TheaterId
+            WHERE s.MovieId = ?
+        `;
+        return new Promise((resolve, reject) => {
+            db.query(query, [MovieId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
 };
 
 module.exports = TheaterModel;

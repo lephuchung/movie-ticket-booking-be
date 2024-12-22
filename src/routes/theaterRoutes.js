@@ -5,10 +5,9 @@ const {
     createTheater,
     updateTheater,
     deleteTheater,
+    getLocations,
+    getTheatersShowingMovie,
 } = require('../controllers/theaterController');
-
-// router.get('/locations', movieController.getLocations); viết lại trong theater
-// router.get('/showing_movie/:title', movieController.getTheatersShowingMovieNationwide); viết lại trông theater
 
 const router = express.Router();
 
@@ -17,5 +16,7 @@ router.get('/:id', getTheaterById);
 router.post('/', createTheater);
 router.put('/:id', updateTheater);
 router.delete('/:id', deleteTheater);
+router.get('/locations', getLocations);
+router.get('/movies/:MovieId', getTheatersShowingMovie);
 
 module.exports = router;

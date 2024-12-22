@@ -64,10 +64,42 @@ const deleteTheater = async (req, res) => {
     }
 };
 
+// Lấy danh sách các tỉnh thành có rạp chiếu
+const getLocations = async (req, res) => {
+    try {
+        const locations = await TheaterModel.getLocations();
+        res.status(200).json({ locations });
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch locations',
+            details: err.message,
+        });
+    }
+};
+
+// Lấy danh sách các rạp đang chiếu một phim
+const getTheatersShowingMovie = async (req, res) => {
+    const { MovieId } = req.params;
+    try {
+        const theaters = await TheaterModel.getTheatersShowingMovie(MovieId);
+        if (theaters.length === 0) {
+            return res.status(404).json({ message: 'No theaters found for the given movie' });
+        }
+        res.status(200).json(theaters);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Failed to fetch theaters for the movie',
+            details: err.message,
+        });
+    }
+};
+
 module.exports = {
     getAllTheaters,
     getTheaterById,
     createTheater,
     updateTheater,
     deleteTheater,
+    getLocations,
+    getTheatersShowingMovie,
 };
