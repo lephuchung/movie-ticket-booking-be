@@ -8,18 +8,17 @@ const ticketRoutes = require('./routes/ticketRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const seatRoutes = require('./routes/seatRoutes');
 const showtimeRoutes = require('./routes/showtimeRoutes');
-const paymentRoutes = require('./routes/paymentRoutes')
 const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
+ const bookingRoutes = require('./routes/bookingRoutes');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-const API_PREFIX = '/api/v1';
-// const API_PREFIX = '';
-
+// const API_PREFIX = '/api/v1';
+const API_PREFIX = '';
 // Sử dụng các route đã định nghĩa
 app.use(`${API_PREFIX}/movies`, movieRoutes);
 app.use(`${API_PREFIX}/theater`, theaterRoutes);
@@ -28,8 +27,8 @@ app.use(`${API_PREFIX}/tickets`, ticketRoutes);
 app.use(`${API_PREFIX}/rooms`, roomRoutes);
 app.use(`${API_PREFIX}/seats`, seatRoutes);
 app.use(`${API_PREFIX}/showtimes`, showtimeRoutes);
-app.use(`${API_PREFIX}/payment`, paymentRoutes);
 app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use('${API_PREFIX}/bookings', bookingRoutes);
 
 // Khởi động server trên cổng 3000 hoặc cổng được cấu hình trong biến môi trường
 const PORT = process.env.PORT || 3000;
