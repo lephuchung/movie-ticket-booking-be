@@ -63,6 +63,56 @@ const deleteSeat = async (req, res) => {
         res.status(500).json({ error: 'Không thể xóa ghế', details: err });
     }
 };
+// controllers/seatController.js
+const getSeatsByShowtimeId = async (req, res) => {
+    const { showtimeId } = req.params;
+    try {
+        // Truy vấn ghế
+        const query = `
+            SELECT 
+                s.row,
+                s.seatNumber,
+                s.id AS seatId,
+                t.id AS ticketId,
+                t.paymentStatus
+            FROM Seats s
+            LEFT JOIN Tickets t ON s.id = t.seatId AND t.showtimeId = ?
+            WHERE s.showtimeId = ?
+            ORDER BY s.row ASC, s.seatNumber ASC;
+        `;
+        const [results] = await db.query(query, [showtimeId, showtimeId]);
+
+        // Nhóm ghế theo hàng
+        const groupedSeats = results.reduce((acc, seat) => {
+            const row = seat.line;
+
+            const isBooked = seat.ticketId && (seat.paymentStatus === 'Paid' || seat.paymentStatus === 'Pending');
+
+            const seatData = {
+                id: seat.seatId,
+                row: seat.line,
+                seatNumber: seat.seatNumber,
+                isBooked: isBooked,
+                isSelected: false,
+            };
+
+            if (!acc[row]) {
+                acc[row] = { row: row, seats: [] };
+            }
+            acc[row].seats.push(seatData);
+            return acc;
+        }, {});
+
+        const seatArray = Object.values(groupedSeats);
+
+        res.status(200).json(seatArray);
+    } catch (err) {
+        console.error('Error fetching seats:', err);
+        res.status(500).json({ error: 'Failed to fetch seats', details: err });
+    }
+};
+
+
 
 module.exports = {
     getAllSeats,
@@ -70,4 +120,5 @@ module.exports = {
     createSeat,
     updateSeat,
     deleteSeat,
+    getSeatsByShowtimeId,
 };
