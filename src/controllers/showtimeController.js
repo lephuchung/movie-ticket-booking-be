@@ -40,7 +40,7 @@ const updateShowtime = async (req, res) => {
     const { id } = req.params;
     const { StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId } = req.body;
     try {
-        const result = await ShowtimeModel.update(id, { howtimeId, StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId });
+        const result = await ShowtimeModel.update(id, { StartTime, EndTime, SeatStatus, Price, TheaterId, RoomId, MovieId });
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: 'Suất chiếu không tồn tại' });
         }
