@@ -1,3 +1,5 @@
+//bookingModel o day
+
 const db = require('../config/db'); // Kết nối cơ sở dữ liệu
 
 const bookingModel = {
