@@ -9,8 +9,9 @@ const roomRoutes = require('./routes/roomRoutes');
 const seatRoutes = require('./routes/seatRoutes');
 const showtimeRoutes = require('./routes/showtimeRoutes');
 const authRoutes = require('./routes/authRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
 require('dotenv').config();
- const bookingRoutes = require('./routes/bookingRoutes');
+
 
 const app = express();
 app.use(express.json());
