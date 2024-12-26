@@ -26,9 +26,9 @@ const UserModel = {
     // Thêm một người dùng mới
     create: (user) => {
         const query = 'INSERT INTO Users (Name, Password, Email, Phone, Role, CreateAt, Status) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const { Name, Password, Email, Phone, Role, CreateAt, Status } = user;
+        const { Name, hashedPassword, Email, Phone, Role, CreateAt, Status } = user;
         return new Promise((resolve, reject) => {
-            db.query(query, [Name, Password, Email, Phone, Role, CreateAt, Status], (err, results) => {
+            db.query(query, [Name, hashedPassword, Email, Phone, Role, CreateAt, Status], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -38,9 +38,9 @@ const UserModel = {
     // Cập nhật thông tin người dùng
     update: (id, user) => {
         const query = 'UPDATE Users SET Name = ?, Password = ?, Email = ?, Phone = ?, Role = ?, CreateAt = ?, Status = ? WHERE UserId = ?';
-        const { Name, Password, Email, Phone, Role, CreateAt, Status } = user;
+        const { Name, hashedPassword, Email, Phone, Role, CreateAt, Status } = user;
         return new Promise((resolve, reject) => {
-            db.query(query, [Name, Password, Email, Phone, Role, CreateAt, Status, id], (err, results) => {
+            db.query(query, [Name, hashedPassword, Email, Phone, Role, CreateAt, Status, id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
