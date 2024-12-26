@@ -1,66 +1,44 @@
-const db = require('../config/db');
+const db = require('../config/db'); // Kết nối đến cơ sở dữ liệu
 
-const PaymentModel = {
-    getAll: () => {
-        const query = 'SELECT * FROM Payments';
-        return new Promise((resolve, reject) => {
-            db.query(query, (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
-            });
-        });
-    },
-
-    getById: (id) => {
-        const query = 'SELECT * FROM Payments WHERE PaymentId = ?';
-        return new Promise((resolve, reject) => {
-            db.query(query, [id], (err, results) => {
-                if (err) return reject(err);
-                resolve(results[0]);
-            });
-        });
-    },
-
-    create: (payment) => {
-        const query = `
-            INSERT INTO Payments (PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId)
-            VALUES (?, ?, ?, ?, ?)
-        `;
-        const { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = payment;
-
-        return new Promise((resolve, reject) => {
-            db.query(query, [PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
-            });
-        });
-    },
-
-    update: (id, payment) => {
-        const query = `
-            UPDATE Payments
-            SET PaymentStatus = ?, Amount = ?, PaymentTime = ?, PaymentMethod = ?, UserId = ?
-            WHERE PaymentId = ?
-        `;
-        const { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = payment;
-
-        return new Promise((resolve, reject) => {
-            db.query(query, [PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId, id], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
-            });
-        });
-    },
-
-    delete: (id) => {
-        const query = 'DELETE FROM Payments WHERE PaymentId = ?';
-        return new Promise((resolve, reject) => {
-            db.query(query, [id], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
-            });
-        });
-    },
+// Hàm tạo thanh toán mới
+const createPayment = (paymentData, callback) => {
+    const { userId, showtimeId, numberOfTickets, totalPrice, paymentMethod, status } = paymentData;
+    const query = 'INSERT INTO Payments (userId, showtimeId, numberOfTickets, totalPrice, paymentMethod, status) VALUES (?, ?, ?, ?, ?, ?)';
+    
+    db.query(query, [userId, showtimeId, numberOfTickets, totalPrice, paymentMethod, status], (err, result) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, result);
+    });
 };
 
-module.exports = PaymentModel;
+// Hàm tìm thanh toán theo ID
+const getPaymentById = (id, callback) => {
+    const query = 'SELECT * FROM Payments WHERE id = ?';
+    db.query(query, [id], (err, result) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, result[0]);
+    });
+};
+
+// Hàm cập nhật trạng thái thanh toán
+const updatePayment = (id, updatedData, callback) => {
+    const { status } = updatedData;
+    const query = 'UPDATE Payments SET status = ? WHERE id = ?';
+    db.query(query, [status, id], (err, result) => {
+        if (err) {
+            return callback(err, null);
+        }
+        callback(null, result);
+    });
+};
+
+// Xuất các phương thức
+module.exports = {
+    create: createPayment,
+    getById: getPaymentById,
+    update: updatePayment,
+};

@@ -1,18 +1,14 @@
 const express = require('express');
-const {
-    getAllPayments,
-    getPaymentById,
-    createPayment,
-    updatePayment,
-    deletePayment,
-} = require('../controllers/paymentController');
-
 const router = express.Router();
+const paymentController = require('../controllers/paymentController');  // Đảm bảo đã có paymentController
 
-router.get('/', getAllPayments);
-router.get('/:id', getPaymentById);
-router.post('/', createPayment);
-router.put('/:id', updatePayment);
-router.delete('/:id', deletePayment);
+// API thanh toán
+router.post('/payment', paymentController.processPayment); // Xử lý thanh toán
+
+// API lấy thông tin thanh toán theo ID
+router.get('/payment/:id', paymentController.getPaymentById);
+
+// API cập nhật trạng thái thanh toán
+router.put('/payment/:id', paymentController.updatePaymentStatus);
 
 module.exports = router;
