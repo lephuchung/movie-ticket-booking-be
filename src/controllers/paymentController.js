@@ -1,75 +1,80 @@
-const PaymentModel = require('../models/paymentModel');
+const PaymentModel = require('../models/paymentModel'); // Import payment model
+const ShowtimeModel = require('../models/showtimeModel'); // Import showtime model
 
-// Lấy danh sách tất cả các thanh toán
-const getAllPayments = async (req, res) => {
+// Hàm xử lý thanh toán
+const processPayment = async (req, res) => {
+    const { showtimeId, seatNumbers, userId, paymentMethod } = req.body;
+
+    // Kiểm tra đầu vào
+    if (!showtimeId || !seatNumbers || !userId || !paymentMethod) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
     try {
-        const payments = await PaymentModel.getAll();
-        res.status(200).json(payments);
+        // Lấy giá vé từ bảng showtimes
+        const showtime = await ShowtimeModel.getById(showtimeId);
+        if (!showtime) {
+            return res.status(404).json({ message: 'Showtime not found' });
+        }
+
+        const pricePerSeat = showtime.Price; // Giá vé mỗi ghế
+        const totalPrice = seatNumbers * pricePerSeat; // Tính tổng giá vé
+
+        // Lưu thông tin thanh toán vào cơ sở dữ liệu
+        const payment = await PaymentModel.create({
+            PaymentStatus: 'pending', // Trạng thái thanh toán ban đầu là 'pending'
+            Amount: totalPrice,
+            PaymentMethod: paymentMethod,
+            UserId: userId,
+            PaymentId: null, // Có thể để null hoặc một giá trị mặc định
+        });
+
+        return res.status(201).json({
+            message: 'Payment processed successfully',
+            payment: {
+                id: payment.insertId, // Trả về ID thanh toán mới
+                totalPrice: totalPrice,
+                PaymentStatus: 'pending',
+                PaymentMethod: paymentMethod,
+                showtimeId: showtimeId,
+                seatNumbers: seatNumbers,
+            },
+        });
     } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch payments', details: err });
+        return res.status(500).json({ error: 'Failed to process payment', details: err.message });
     }
 };
 
-// Lấy thông tin thanh toán theo ID
-const getPaymentById = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const payment = await PaymentModel.getById(id);
+// Hàm lấy thông tin thanh toán theo ID
+const getPaymentById = (req, res) => {
+    const paymentId = req.params.id; // Lấy id từ URL parameters
+
+    PaymentModel.getById(paymentId, (err, payment) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to retrieve payment', details: err.message });
+        }
         if (!payment) {
             return res.status(404).json({ message: 'Payment not found' });
         }
-        res.status(200).json(payment);
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to fetch payment', details: err });
-    }
+        return res.status(200).json({ payment });
+    });
 };
 
-// Tạo mới một thanh toán
-const createPayment = async (req, res) => {
-    const { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = req.body;
-    const payment = { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId };
-    try {
-        const result = await PaymentModel.create(payment);
-        res.status(201).json({ message: 'Payment created successfully', paymentId: result.insertId });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to create payment', details: err });
-    }
-};
+// Hàm cập nhật trạng thái thanh toán
+const updatePaymentStatus = (req, res) => {
+    const { id, paymentStatus } = req.body;
 
-// Cập nhật thông tin thanh toán
-const updatePayment = async (req, res) => {
-    const { id } = req.params;
-    const { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId } = req.body;
-    const payment = { PaymentStatus, Amount, PaymentTime, PaymentMethod, UserId };
-    try {
-        const result = await PaymentModel.update(id, payment);
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Payment not found' });
+    PaymentModel.update(id, { PaymentStatus: paymentStatus }, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to update payment', details: err.message });
         }
-        res.status(200).json({ message: 'Payment updated successfully' });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to update payment', details: err });
-    }
+        return res.status(200).json({ message: 'Payment status updated', result });
+    });
 };
 
-// Xóa một thanh toán
-const deletePayment = async (req, res) => {
-    const { id } = req.params;
-    try {
-        const result = await PaymentModel.delete(id);
-        if (result.affectedRows === 0) {
-            return res.status(404).json({ message: 'Payment not found' });
-        }
-        res.status(200).json({ message: 'Payment deleted successfully' });
-    } catch (err) {
-        res.status(500).json({ error: 'Failed to delete payment', details: err });
-    }
-};
-
+// Xuất các phương thức
 module.exports = {
-    getAllPayments,
+    processPayment,
     getPaymentById,
-    createPayment,
-    updatePayment,
-    deletePayment,
+    updatePaymentStatus,
 };
