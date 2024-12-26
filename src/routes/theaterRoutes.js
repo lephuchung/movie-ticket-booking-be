@@ -8,7 +8,6 @@ const {
     getLocations,
     getTheatersShowingMovie,
 } = require('../controllers/theaterController');
-const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
@@ -16,8 +15,8 @@ router.get('/movies/:MovieId', getTheatersShowingMovie);
 router.get('/locations', getLocations);
 router.get('/', getAllTheaters);
 router.get('/:id', getTheaterById);
-router.post('/', authenticateToken, createTheater);
-router.put('/:id', authenticateToken, updateTheater);
-router.delete('/:id', authenticateToken, deleteTheater);
+router.post('/', createTheater);
+router.put('/:id', updateTheater);
+router.delete('/:id', deleteTheater);
 
 module.exports = router;
