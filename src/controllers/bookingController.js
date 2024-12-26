@@ -66,7 +66,7 @@ const bookTickets = (req, res) => {
                     seatNumber,
                     new Date(),
                     ticketPrice, // Sử dụng giá vé từ bảng showtimes
-                    'paid',
+                    'pending',
                     userId,
                     showtimeId,
                     paymentId, // Liên kết PaymentId với vé
