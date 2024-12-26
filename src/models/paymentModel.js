@@ -7,11 +7,14 @@ const createPayment = (paymentData, callback) => {
         INSERT INTO Payments (PaymentStatus, Amount, PaymentMethod, UserId, PaymentId) 
         VALUES (?, ?, ?, ?, ?)
     `;
-    db.query(query, [PaymentStatus, Amount, PaymentMethod, UserId, PaymentId], (err, result) => {
-        if (err) {
-            return callback(err, null);
-        }
-        callback(null, result); // Trả về kết quả, có thể dùng result.insertId để lấy ID mới
+
+    return new Promise((resolve, reject) => {
+        db.query(query, [PaymentStatus, Amount, PaymentMethod, UserId, PaymentId], (err, result) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(result); // Trả về kết quả, có thể dùng result.insertId để lấy ID mới
+        });
     });
 };
 
