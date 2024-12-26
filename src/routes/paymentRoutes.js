@@ -6,14 +6,13 @@ const {
     updatePayment,
     deletePayment,
 } = require('../controllers/paymentController');
-const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/', authenticateToken, getAllPayments);
-router.get('/:id', authenticateToken, getPaymentById);
-router.post('/', authenticateToken, createPayment);
-router.put('/:id', authenticateToken, updatePayment);
-router.delete('/:id', authenticateToken, deletePayment);
+router.get('/', getAllPayments);
+router.get('/:id', getPaymentById);
+router.post('/', createPayment);
+router.put('/:id', updatePayment);
+router.delete('/:id', deletePayment);
 
 module.exports = router;

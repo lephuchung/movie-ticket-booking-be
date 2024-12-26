@@ -8,18 +8,17 @@ const {
     getTicketsByUserEmail,
     getTicketsByShowtimeId,
 } = require('../controllers/ticketController');
-const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
 // Lấy ticket được đặt bởi một người
 router.get('/user/:email', getTicketsByUserEmail);
 router.get('/showtime/:showtimeId', getTicketsByShowtimeId)
-router.get('/', authenticateToken, getAllTickets);
-router.get('/:id', authenticateToken, authenticateToken, getTicketById);
-router.post('/', authenticateToken, createTicket);
-router.put('/:id', authenticateToken, updateTicket);
-router.delete('/:id', authenticateToken, deleteTicket);
+router.get('/', getAllTickets);
+router.get('/:id', getTicketById);
+router.post('/', createTicket);
+router.put('/:id', updateTicket);
+router.delete('/:id', deleteTicket);
 
 
 module.exports = router;
