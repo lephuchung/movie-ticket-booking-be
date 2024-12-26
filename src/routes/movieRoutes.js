@@ -15,6 +15,7 @@ const {
     getMoviesByGenre,
     getMovieDetailsByTitle,
 } = require('../controllers/movieController');
+const { authenticateToken } = require('../middlewares/authMiddleware');
 
 router.get('/currently-showing-in-three-day', getMoviesCurrentlyShowingInThreeDay);
 router.get('/currently-showing-in-three-day/location/:location', getMoviesCurrentlyShowingByLocationInThreeDay);
@@ -25,8 +26,8 @@ router.get('/genre/:genre', getMoviesByGenre);
 router.get('/details/:title', getMovieDetailsByTitle);
 router.get('/', getAllMovies);
 router.get('/:id', getMovieById);
-router.post('/', createMovie);
-router.put('/:id', updateMovie);
-router.delete('/:id', deleteMovie);
+router.post('/', authenticateToken, createMovie);
+router.put('/:id', authenticateToken, updateMovie);
+router.delete('/:id', authenticateToken, deleteMovie);
 
 module.exports = router;

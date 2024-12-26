@@ -95,6 +95,29 @@ const TicketModel = {
             });
         });
     },
+    getTicketsByShowtimeId: (showtimeId) => {
+        const query = `
+            SELECT 
+                TicketId,
+                UserId,
+                SeatNumber,
+                TotalPrice,
+                PaymentStatus,
+                BookingTime
+            FROM 
+                Tickets
+            WHERE 
+                ShowtimeId = ?
+                AND PaymentStatus IN ('paid', 'pending');
+        `;
+
+        return new Promise((resolve, reject) => {
+            db.query(query, [showtimeId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+    },
 };
 
 module.exports = TicketModel;

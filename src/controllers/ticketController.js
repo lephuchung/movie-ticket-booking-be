@@ -77,6 +77,20 @@ const getTicketsByUserEmail = async (req, res) => {
     }
 };
 
+const getTicketsByShowtimeId = async (req, res) => {
+    const { showtimeId } = req.params;
+
+    try {
+        const tickets = await TicketModel.getTicketsByShowtimeId(showtimeId);
+        if (tickets.length === 0) {
+            return res.status(404).json({ message: 'No tickets found for this showtimeId' });
+        }
+        res.status(200).json(tickets);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch tickets by showtimeId', details: err });
+    }
+};
+
 module.exports = {
     getAllTickets,
     getTicketById,
@@ -84,4 +98,5 @@ module.exports = {
     updateTicket,
     deleteTicket,
     getTicketsByUserEmail,
+    getTicketsByShowtimeId,
 };

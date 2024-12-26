@@ -6,6 +6,7 @@ const {
     updateRoom,
     deleteRoom,
 } = require('../controllers/roomController');
+const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 

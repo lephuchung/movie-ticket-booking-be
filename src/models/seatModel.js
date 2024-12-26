@@ -52,6 +52,27 @@ const SeatModel = {
             });
         });
     },
+
+    getSeatsByRoomId: (RoomId) => {
+        const query = `
+            SELECT *      
+            FROM 
+                Seats            
+            WHERE 
+                RoomId = ?
+            ORDER BY 
+                SeatId;
+        `;
+
+        return new Promise((resolve, reject) => {
+            db.query(query, [RoomId], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+    },
 };
 
 module.exports = SeatModel;
