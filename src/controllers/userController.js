@@ -25,6 +25,7 @@ const getUserById = async (req, res) => {
 
 const createUser = async (req, res) => {
     const { Name, Password, Email, Phone, Role, CreateAt, Status } = req.body;
+
     const hashedPassword = await bcrypt.hash(Password, 12);
 
     try {
