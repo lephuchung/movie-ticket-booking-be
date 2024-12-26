@@ -10,6 +10,7 @@ const {
     getShowtimesForMovieInThreeDaysInLocation,
     getShowtimesForMovieInThreeDays,
 } = require('../controllers/showtimeController');
+const { authenticateToken } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 router.get('/:movieId/next-three-days', getShowtimesForMovieInThreeDays);
@@ -18,9 +19,9 @@ router.get('/:movieId/:location/:startTime/:endTime', getShowtimesForMovieByLoca
 router.get('/:movieId/:startTime/:endTime', getShowtimesForMovieByTimeRange);
 router.get('/', getAllShowtimes);
 router.get('/:id', getShowtimeById);
-router.post('/', createShowtime);
-router.put('/:id', updateShowtime);
-router.delete('/:id', deleteShowtime);
+router.post('/', authenticateToken, createShowtime);
+router.put('/:id', authenticateToken, updateShowtime);
+router.delete('/:id', authenticateToken, deleteShowtime);
 
 
 module.exports = router;

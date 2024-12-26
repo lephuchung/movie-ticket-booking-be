@@ -63,13 +63,13 @@ exports.signup = async (req, res) => {
                     message: 'Registration successful',
                     token,
                     user: {
-                        id: results.insertId,
-                        name,
-                        email,
-                        phone,
-                        role,
-                        status,
-                        createAt
+                        UserId: results.insertId,
+                        Name: name,
+                        Email: email,
+                        Phone: phone,
+                        Role: role,
+                        Status: status,
+                        CreateAt: createAt
                     }
                 });
             });

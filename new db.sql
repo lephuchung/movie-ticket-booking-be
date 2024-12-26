@@ -84,7 +84,34 @@ CREATE TABLE Tickets (
     FOREIGN KEY (UserId) REFERENCES Users(userId),
     FOREIGN KEY (ShowtimeId) REFERENCES Showtimes(ShowtimeId),
     FOREIGN KEY (PaymentId) REFERENCES Payments(PaymentId)
-    );
+);
+
+SET GLOBAL event_scheduler = ON;
+DELIMITER $$
+
+CREATE TRIGGER AfterInsertTicket
+AFTER INSERT ON Tickets
+FOR EACH ROW
+BEGIN
+    -- Tạo event để cập nhật PaymentStatus sau 10 phút
+    SET @eventName = CONCAT('UpdateTicket_', NEW.TicketId);
+    SET @eventSQL = CONCAT('
+        CREATE EVENT ', @eventName, '
+        ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 10 MINUTE
+        DO
+        BEGIN
+            UPDATE Tickets
+            SET PaymentStatus = "cancel"
+            WHERE TicketId = ', NEW.TicketId, ' AND PaymentStatus = "pending";
+        END
+    ');
+
+    PREPARE stmt FROM @eventSQL;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END$$
+
+DELIMITER ;
 
 -- Thêm dữ liệu cho bảng Theaters
 INSERT INTO Theaters (Name, TotalRoom, Location) VALUES
@@ -1309,17 +1336,17 @@ INSERT INTO Movies (title, description, genre, releaseDate, rating, duration, di
 
 -- Thêm dữ liệu cho bảng Showtimes
 INSERT INTO Showtimes (startTime, endTime, seatStatus, price, theaterId, roomId, movieId) VALUES
-('2024-12-22 18:00:00', '2024-12-22 20:00:00', 'available', 100000, 1, 1, 1),
-('2024-12-22 19:00:00', '2024-12-22 21:00:00', 'available', 100000, 1, 2, 1),
-('2024-12-22 20:00:00', '2024-12-22 22:00:00', 'available', 90000, 1, 3, 1),
-('2024-12-23 19:00:00', '2024-12-23 21:00:00', 'available', 120000, 2, 6, 2),
-('2024-12-23 20:00:00', '2024-12-23 22:00:00', 'available', 120000, 2, 7, 2),
-('2024-12-24 20:00:00', '2024-12-24 22:00:00', 'available', 90000, 3, 10, 3),
-('2024-12-24 20:30:00', '2024-12-24 22:30:00', 'available', 90000, 3, 11, 3),
-('2024-12-24 20:00:00', '2024-12-24 22:00:00', 'available', 100000, 1, 1, 4),
-('2024-12-24 21:00:00', '2024-12-24 23:00:00', 'available', 100000, 1, 2, 4),
-('2024-12-24 19:00:00', '2024-12-24 21:00:00', 'available', 100000, 1, 1, 5),
-('2024-12-24 20:00:00', '2024-12-24 22:00:00', 'available', 100000, 1, 2, 5);
+('2024-12-26 18:00:00', '2024-12-26 20:00:00', 'available', 100000, 1, 1, 1),
+('2024-12-26 19:00:00', '2024-12-26 21:00:00', 'available', 100000, 1, 2, 1),
+('2024-12-26 20:00:00', '2024-12-26 22:00:00', 'available', 90000, 1, 3, 1),
+('2024-12-27 19:00:00', '2024-12-27 21:00:00', 'available', 120000, 2, 6, 2),
+('2024-12-27 20:00:00', '2024-12-27 22:00:00', 'available', 120000, 2, 7, 2),
+('2024-12-28 20:00:00', '2024-12-28 22:00:00', 'available', 90000, 3, 10, 3),
+('2024-12-28 20:30:00', '2024-12-28 22:30:00', 'available', 90000, 3, 11, 3),
+('2024-12-28 20:00:00', '2024-12-28 22:00:00', 'available', 100000, 1, 1, 4),
+('2024-12-28 21:00:00', '2024-12-28 23:00:00', 'available', 100000, 1, 2, 4),
+('2024-12-28 19:00:00', '2024-12-28 21:00:00', 'available', 100000, 1, 1, 5),
+('2024-12-28 20:00:00', '2024-12-28 22:00:00', 'available', 100000, 1, 2, 5);
 
 -- Thêm dữ liệu cho bảng Users
 INSERT INTO Users (name, password, email, phone, role, createAt, status) VALUES
