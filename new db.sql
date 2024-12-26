@@ -86,32 +86,32 @@ CREATE TABLE Tickets (
     FOREIGN KEY (PaymentId) REFERENCES Payments(PaymentId)
 );
 
-SET GLOBAL event_scheduler = ON;
-DELIMITER $$
+-- SET GLOBAL event_scheduler = ON;
+-- DELIMITER $$
 
-CREATE TRIGGER AfterInsertTicket
-AFTER INSERT ON Tickets
-FOR EACH ROW
-BEGIN
-    -- Tạo event để cập nhật PaymentStatus sau 10 phút
-    SET @eventName = CONCAT('UpdateTicket_', NEW.TicketId);
-    SET @eventSQL = CONCAT('
-        CREATE EVENT ', @eventName, '
-        ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 10 MINUTE
-        DO
-        BEGIN
-            UPDATE Tickets
-            SET PaymentStatus = "cancel"
-            WHERE TicketId = ', NEW.TicketId, ' AND PaymentStatus = "pending";
-        END
-    ');
+-- CREATE TRIGGER AfterInsertTicket
+-- AFTER INSERT ON Tickets
+-- FOR EACH ROW
+-- BEGIN
+--     -- Tạo event để cập nhật PaymentStatus sau 10 phút
+--     SET @eventName = CONCAT('UpdateTicket_', NEW.TicketId);
+--     SET @eventSQL = CONCAT('
+--         CREATE EVENT ', @eventName, '
+--         ON SCHEDULE AT CURRENT_TIMESTAMP + INTERVAL 10 MINUTE
+--         DO
+--         BEGIN
+--             UPDATE Tickets
+--             SET PaymentStatus = "cancel"
+--             WHERE TicketId = ', NEW.TicketId, ' AND PaymentStatus = "pending";
+--         END
+--     ');
 
-    PREPARE stmt FROM @eventSQL;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-END$$
+--     PREPARE stmt FROM @eventSQL;
+--     EXECUTE stmt;
+--     DEALLOCATE PREPARE stmt;
+-- END$$
 
-DELIMITER ;
+-- DELIMITER ;
 
 -- Thêm dữ liệu cho bảng Theaters
 INSERT INTO Theaters (Name, TotalRoom, Location) VALUES
