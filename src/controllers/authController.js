@@ -110,6 +110,61 @@ exports.signin = async (req, res) => {
     });
 };
 
+// Đăng nhập chỉ dành cho admin
+exports.adminSignin = async (req, res) => {
+    const { email, password } = req.body;
+
+    // Kiểm tra xem email và password có được cung cấp không
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    db.query('SELECT * FROM Users WHERE Email = ?', [email], async (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query error' });
+        }
+
+        // Kiểm tra xem người dùng có tồn tại không
+        if (results.length === 0) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        const user = results[0];
+
+        // Kiểm tra trạng thái tài khoản
+        if (user.Status !== 'active') {
+            return res.status(403).json({ error: 'User account is not active' });
+        }
+
+        // Kiểm tra role của tài khoản
+        if (user.Role !== 'admin') {
+            return res.status(403).json({ error: 'Only admin accounts can log in' });
+        }
+
+        // Kiểm tra mật khẩu
+        const validPassword = await bcrypt.compare(password, user.Password);
+        if (!validPassword) {
+            return res.status(401).json({ error: 'Invalid credentials' });
+        }
+
+        // Tạo access token và refresh token
+        const accessToken = jwt.sign(
+            { userId: user.UserId, role: user.Role },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRATION }
+        );
+
+        const refreshToken = jwt.sign(
+            { userId: user.UserId },
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_REFRESH_EXPIRATION }
+        );
+
+        res.json({ accessToken, refreshToken, user });
+    });
+};
+
+
 // Đăng xuất
 exports.signout = (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
